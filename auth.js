@@ -18,7 +18,7 @@ document.getElementById("signupForm")?.addEventListener("submit", function (even
         })
         .then(() => {
             alert("Account created! You can now log in.");
-            window.location.href = "login.html"; // Redirect to login page after successful sign up
+            // Removed the redirect to login page after successful sign-up.
         })
         .catch(error => alert(error.message));
 });
@@ -32,8 +32,7 @@ document.getElementById("loginForm")?.addEventListener("submit", function (event
     auth.signInWithEmailAndPassword(email, password)
         .then(userCredential => {
             localStorage.setItem("user", userCredential.user.uid);
-            // After successful login, redirect to the dashboard or the previous page
-            window.location.href = localStorage.getItem("redirectURL") || "dashboard.html";
+            // Removed redirect after login.
         })
         .catch(error => alert(error.message));
 });
@@ -41,13 +40,6 @@ document.getElementById("loginForm")?.addEventListener("submit", function (event
 // CHECK IF USER IS LOGGED IN
 document.addEventListener("DOMContentLoaded", function () {
     const userId = localStorage.getItem("user");
-    const currentPage = window.location.pathname;
-
-    // Check if the current page is dashboard.html or another protected page
-    if (currentPage === "/dashboard.html" && !userId) {
-        // If the user is not logged in and tries to access dashboard.html, redirect to login
-        window.location.href = "login.html";  // Redirect to login page
-    }
 
     // If the user is logged in, display their name (on protected pages)
     if (userId) {
@@ -57,12 +49,13 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     }
+    // Removed the redirect logic completely here as well.
 });
 
 // LOGOUT FUNCTION
 document.getElementById("logoutBtn")?.addEventListener("click", function () {
     auth.signOut().then(() => {
         localStorage.removeItem("user");
-        window.location.href = "login.html"; // Redirect to login page after logging out
+        // Removed the redirect to login page after logging out.
     });
 });
