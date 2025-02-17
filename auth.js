@@ -41,11 +41,12 @@ document.getElementById("loginForm")?.addEventListener("submit", function (event
 // CHECK IF USER IS LOGGED IN
 document.addEventListener("DOMContentLoaded", function () {
     const userId = localStorage.getItem("user");
-    
-    // If the user is not logged in and we're not on the login page, redirect to login
-    if (!userId && window.location.pathname !== "/login.html") {
-        // Store the current page URL so that we can redirect the user back after login
-        localStorage.setItem("redirectURL", window.location.pathname);
+    const currentPage = window.location.pathname;
+
+    // Skip login check on signup and login pages
+    if (!userId && currentPage !== "/login.html" && currentPage !== "/signup.html") {
+        // If the user is not logged in and we're not on the login/signup page, store the redirect URL
+        localStorage.setItem("redirectURL", currentPage);
         window.location.href = "login.html";  // Redirect to login page
     }
 
