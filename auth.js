@@ -37,23 +37,13 @@ document.getElementById("loginForm")?.addEventListener("submit", function (event
         .catch(error => alert(error.message));
 });
 
-// CHECK IF USER IS LOGGED IN
-document.addEventListener("DOMContentLoaded", function () {
+// CHECK IF USER IS LOGGED IN (Only for protected pages like dashboard.html)
+function checkIfLoggedIn() {
     const userId = localStorage.getItem("user");
-
-    // If user is logged in, fetch their data and display it
-    if (userId) {
-        db.collection("users").doc(userId).get().then(doc => {
-            if (doc.exists) {
-                document.getElementById("userName").textContent = doc.data().fullName;  // Display user's full name
-            }
-        });
-    } 
-    // If no user, redirect to login page
-    else {
-        window.location.href = "login.html";
+    if (!userId) {
+        window.location.href = "login.html";  // If not logged in, redirect to login page
     }
-});
+}
 
 // LOGOUT FUNCTION
 document.getElementById("logoutBtn")?.addEventListener("click", function () {
@@ -62,3 +52,8 @@ document.getElementById("logoutBtn")?.addEventListener("click", function () {
         window.location.href = "login.html";  // Redirect to login page after logout
     });
 });
+
+// CHECK IF USER IS LOGGED IN WHEN ACCESSING DASHBOARD
+if (window.location.pathname === "/dashboard.html") {
+    checkIfLoggedIn();
+}
