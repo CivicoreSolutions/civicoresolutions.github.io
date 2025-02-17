@@ -43,14 +43,13 @@ document.addEventListener("DOMContentLoaded", function () {
     const userId = localStorage.getItem("user");
     const currentPage = window.location.pathname;
 
-    // Skip login check on signup and login pages
-    if (!userId && currentPage !== "/login.html" && currentPage !== "/signup.html") {
-        // If the user is not logged in and we're not on the login/signup page, store the redirect URL
-        localStorage.setItem("redirectURL", currentPage);
+    // Check if the current page is dashboard.html or another protected page
+    if (currentPage === "/dashboard.html" && !userId) {
+        // If the user is not logged in and tries to access dashboard.html, redirect to login
         window.location.href = "login.html";  // Redirect to login page
     }
 
-    // If the user is logged in, display their name
+    // If the user is logged in, display their name (on protected pages)
     if (userId) {
         db.collection("users").doc(userId).get().then(doc => {
             if (doc.exists) {
