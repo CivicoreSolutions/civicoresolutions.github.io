@@ -18,7 +18,7 @@ document.getElementById("signupForm")?.addEventListener("submit", function (even
         })
         .then(() => {
             alert("Account created! You can now log in.");
-            window.location.href = "login.html";
+            window.location.href = "login.html";  // Redirect to login page after signup
         })
         .catch(error => alert(error.message));
 });
@@ -31,8 +31,8 @@ document.getElementById("loginForm")?.addEventListener("submit", function (event
 
     auth.signInWithEmailAndPassword(email, password)
         .then(userCredential => {
-            localStorage.setItem("user", userCredential.user.uid);
-            window.location.href = "dashboard.html";
+            localStorage.setItem("user", userCredential.user.uid);  // Save user UID in localStorage
+            window.location.href = "dashboard.html";  // Redirect to dashboard
         })
         .catch(error => alert(error.message));
 });
@@ -40,13 +40,17 @@ document.getElementById("loginForm")?.addEventListener("submit", function (event
 // CHECK IF USER IS LOGGED IN
 document.addEventListener("DOMContentLoaded", function () {
     const userId = localStorage.getItem("user");
+
+    // If user is logged in, fetch their data and display it
     if (userId) {
         db.collection("users").doc(userId).get().then(doc => {
             if (doc.exists) {
-                document.getElementById("userName").textContent = doc.data().fullName;
+                document.getElementById("userName").textContent = doc.data().fullName;  // Display user's full name
             }
         });
-    } else {
+    } 
+    // If no user, redirect to login page
+    else {
         window.location.href = "login.html";
     }
 });
@@ -54,7 +58,7 @@ document.addEventListener("DOMContentLoaded", function () {
 // LOGOUT FUNCTION
 document.getElementById("logoutBtn")?.addEventListener("click", function () {
     auth.signOut().then(() => {
-        localStorage.removeItem("user");
-        window.location.href = "login.html";
+        localStorage.removeItem("user");  // Remove user from localStorage
+        window.location.href = "login.html";  // Redirect to login page after logout
     });
 });
