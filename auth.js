@@ -18,7 +18,7 @@ document.getElementById("signupForm")?.addEventListener("submit", function (even
         })
         .then(() => {
             alert("Account created! You can now log in.");
-            window.location.href = "login.html";
+            window.location.href = "login.html"; // Redirect to login page after successful sign up
         })
         .catch(error => alert(error.message));
 });
@@ -32,7 +32,8 @@ document.getElementById("loginForm")?.addEventListener("submit", function (event
     auth.signInWithEmailAndPassword(email, password)
         .then(userCredential => {
             localStorage.setItem("user", userCredential.user.uid);
-            window.location.href = "dashboard.html";
+            // After successful login, redirect to the dashboard or the previous page
+            window.location.href = localStorage.getItem("redirectURL") || "dashboard.html";
         })
         .catch(error => alert(error.message));
 });
@@ -40,14 +41,21 @@ document.getElementById("loginForm")?.addEventListener("submit", function (event
 // CHECK IF USER IS LOGGED IN
 document.addEventListener("DOMContentLoaded", function () {
     const userId = localStorage.getItem("user");
+    
+    // If the user is not logged in and we're not on the login page, redirect to login
+    if (!userId && window.location.pathname !== "/login.html") {
+        // Store the current page URL so that we can redirect the user back after login
+        localStorage.setItem("redirectURL", window.location.pathname);
+        window.location.href = "login.html";  // Redirect to login page
+    }
+
+    // If the user is logged in, display their name
     if (userId) {
         db.collection("users").doc(userId).get().then(doc => {
             if (doc.exists) {
                 document.getElementById("userName").textContent = doc.data().fullName;
             }
         });
-    } else {
-        window.location.href = "login.html";
     }
 });
 
@@ -55,6 +63,6 @@ document.addEventListener("DOMContentLoaded", function () {
 document.getElementById("logoutBtn")?.addEventListener("click", function () {
     auth.signOut().then(() => {
         localStorage.removeItem("user");
-        window.location.href = "login.html";
+        window.location.href = "login.html"; // Redirect to login page after logging out
     });
 });
