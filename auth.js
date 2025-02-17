@@ -18,8 +18,7 @@ document.getElementById("signupForm")?.addEventListener("submit", function (even
         })
         .then(() => {
             alert("Account created! You can now log in.");
-            // Optional: Redirect to login page after sign-up
-            // window.location.href = "login.html"; 
+            window.location.href = "login.html";
         })
         .catch(error => alert(error.message));
 });
@@ -33,17 +32,14 @@ document.getElementById("loginForm")?.addEventListener("submit", function (event
     auth.signInWithEmailAndPassword(email, password)
         .then(userCredential => {
             localStorage.setItem("user", userCredential.user.uid);
-            // Redirect to dashboard after successful login
-            window.location.href = "dashboard.html"; 
+            window.location.href = "dashboard.html";
         })
         .catch(error => alert(error.message));
 });
 
-// CHECK IF USER IS LOGGED IN (On pages where you want to show user data or handle login)
+// CHECK IF USER IS LOGGED IN
 document.addEventListener("DOMContentLoaded", function () {
     const userId = localStorage.getItem("user");
-
-    // If the user is logged in, display their name (on protected pages like dashboard)
     if (userId) {
         db.collection("users").doc(userId).get().then(doc => {
             if (doc.exists) {
@@ -51,8 +47,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     } else {
-        // Optional: Redirect to login page if not logged in
-        // window.location.href = "login.html";
+        window.location.href = "login.html";
     }
 });
 
@@ -60,7 +55,6 @@ document.addEventListener("DOMContentLoaded", function () {
 document.getElementById("logoutBtn")?.addEventListener("click", function () {
     auth.signOut().then(() => {
         localStorage.removeItem("user");
-        // Redirect to login page after logout
         window.location.href = "login.html";
     });
 });
